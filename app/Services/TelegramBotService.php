@@ -31,12 +31,17 @@ class TelegramBotService
     }
     public function sendMessage($chatId, $text)
     {
-        Http::post(
+        $response = Http::post(
             "https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN') . "/sendMessage",
             [
                 'chat_id' => $chatId,
                 'text' => $text,
             ]
         );
+
+        \Log::info('Telegram Response', [
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
     }
 }
