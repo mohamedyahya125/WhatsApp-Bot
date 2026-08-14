@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\TelegramBotService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log; // 👈 ضيف السطر ده فوق
 
 class TelegramWebhookController extends Controller
 {
@@ -15,17 +16,21 @@ class TelegramWebhookController extends Controller
         $this->telegramBotService = $telegramBotService;
     }
 
-    /**
-     * استلام الـ Webhook من تليجرام
-     */
     public function webhook(Request $request): JsonResponse
     {
         $data = $request->all();
 
-        // تمرير البيانات للخدمة لمعالجتها
-        $this->telegramBotService->handleWebhook($data);
+        // 👈 تسجل البيانات اللي جاية عشان تتأكد إن تيليجرام بيوصل
+        Log::info('Telegram Webhook Received:', $data);
 
-        // تليجرام يتوقع دائمًا استجابة 200 OK
+        try {
+            $this->telegramBotService->handleWebhook($data);
+        } catch (\Throwable $e) {
+            // 👈 لو حصل خطأ جوه الخدمة، سجل الخطأ من غير ما توقع الاستجابة
+            Log::error('Telegram Service Error: ' . $e->getMessage());
+        }
+
+        // إرجاع 200 دائماً لتيليجرام
         return response()->json(['status' => 'success'], 200);
     }
 }
