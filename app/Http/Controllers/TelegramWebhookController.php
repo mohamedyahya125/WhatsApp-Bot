@@ -11,15 +11,13 @@ class TelegramWebhookController extends Controller
     {
         $chatId = $request->input('message.chat.id');
 
-        if ($chatId) {
-            Http::post(
-                'https://api.telegram.org/bot' . env('TELEGRAM_BOT_TOKEN') . '/sendMessage',
-                [
-                    'chat_id' => $chatId,
-                    'text' => 'البوت شغال ✅',
-                ]
-            );
-        }
+        Http::post(
+            'https://api.telegram.org/bot' . env('TELEGRAM_BOT_TOKEN') . '/sendMessage',
+            [
+                'chat_id' => $chatId,
+                'text' => 'Hello From Laravel',
+            ]
+        );
 
         return response()->json(['ok' => true]);
     }
