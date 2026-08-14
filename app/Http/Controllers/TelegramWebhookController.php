@@ -7,18 +7,11 @@ use Illuminate\Http\Request;
 
 class TelegramWebhookController extends Controller
 {
-    public function webhook(TelegramBotService $telegram, Request $request)
+    public function webhook(Request $request)
     {
-        $data = $request->all();
-
-        $chatId = $data['message']['chat']['id'] ?? null;
-
-        if ($chatId) {
-            $telegram->sendMessage($chatId, 'اختبار البوت');
-        }
-
         return response()->json([
-            'ok' => true
+            'token_exists' => env('TELEGRAM_BOT_TOKEN'),
+            'data' => $request->all()
         ]);
     }
 }
