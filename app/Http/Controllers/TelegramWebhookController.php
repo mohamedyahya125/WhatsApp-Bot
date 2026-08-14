@@ -16,6 +16,7 @@ class TelegramWebhookController extends Controller
             $message['message'],
             $message['name']
         );
+        $telegram->sendMessage($message['chat'], $reply);
         return response()->json([
             'messages' => 'تم بنجاح',
             'message' => $message,

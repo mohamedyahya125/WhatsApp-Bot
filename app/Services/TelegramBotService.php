@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Http;
+
+
 class TelegramBotService
 {
     public function handleMessage($update)
@@ -25,5 +28,15 @@ class TelegramBotService
         } else {
             return 'اختيار غير صحيح';
         }
+    }
+    public function sendMessage($chatId, $text)
+    {
+        Http::post(
+            "https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN') . "/sendMessage",
+            [
+                'chat_id' => $chatId,
+                'text' => $text,
+            ]
+        );
     }
 }
