@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\TelegramBotService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TelegramWebhookController extends Controller
 {
     public function webhook(Request $request)
     {
+        Log::info('Telegram Update', $request->all());
+
         return response()->json([
-            'token_exists' => env('TELEGRAM_BOT_TOKEN'),
-            'data' => $request->all()
+            'ok' => true
         ]);
     }
 }
